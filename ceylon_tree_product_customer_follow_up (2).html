@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEYLON TREE PRODUCT - කස්ටමර් ෆලෝ විස්තර</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans Sinhala & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body {
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+            background-color: #f0fdf4; /* Soft eco-green tint */
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 4px;
+        }
+
+        /* Print Styles - Clean Official Report */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                font-size: 12pt;
+                margin: 0;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin-top: 15px;
+            }
+            th, td {
+                border: 1px solid #cbd5e1 !important;
+                padding: 8px 10px !important;
+                text-align: left !important;
+                font-size: 10pt !important;
+                color: #0f172a !important;
+            }
+            th {
+                background-color: #ecfdf5 !important;
+                font-weight: bold !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            tr {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation / Header (Hidden on Print) -->
+    <header class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-700 text-white shadow-lg sticky top-0 z-30 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3.5 sm:px-6 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/15 p-2.5 rounded-xl backdrop-blur-sm border border-white/20">
+                    <i data-lucide="trees" class="w-7 h-7 text-emerald-200"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-wide leading-tight">CEYLON TREE PRODUCT</h1>
+                    <p class="text-xs sm:text-sm text-emerald-100 font-medium">කස්ටමර් ෆලෝ විස්තර (Customer Follow-up Details)</p>
+                </div>
+            </div>
+
+            <!-- Live Sync Status & Quick Print -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button type="button" onclick="openConfigModal()" id="syncStatusBadge" title="දත්ත ගබඩා සැකසුම් (Database Settings)" class="flex items-center gap-1.5 bg-emerald-950/50 hover:bg-emerald-950/80 border border-emerald-400/30 px-3 py-1.5 rounded-full text-xs font-medium transition cursor-pointer">
+                    <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span id="syncText">සම්බන්ධ වෙමින්...</span>
+                    <i data-lucide="settings" class="w-3.5 h-3.5 text-emerald-200 ml-0.5"></i>
+                </button>
+                <button onclick="window.print()" class="bg-white text-emerald-800 hover:bg-emerald-50 active:scale-95 transition font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-xl shadow-sm flex items-center gap-1.5 cursor-pointer">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">ප්‍රින්ට් කරන්න</span>
+                    <span class="sm:hidden">Print</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Print-Only Official Header -->
+    <div class="hidden print-only border-b-2 border-emerald-800 pb-4 mb-5 pt-2 px-4">
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-2xl font-bold text-emerald-900">CEYLON TREE PRODUCT</h1>
+                <h2 class="text-base font-semibold text-slate-700 mt-0.5">කස්ටමර් ෆලෝ විස්තර සාරාංශය (Customer Follow-up Summary)</h2>
+            </div>
+            <div class="text-right text-xs text-slate-600">
+                <p id="printDateDisplay">දිනය: -</p>
+                <p id="printFilterDisplay">පෙරහන (Filter): සියලුම දත්ත</p>
+            </div>
+        </div>
+        <div id="printStatsSummary" class="mt-3 pt-2 border-t border-slate-200 flex gap-6 text-sm font-medium text-slate-800">
+            <!-- Populated dynamically before print -->
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-5 sm:px-6 space-y-6 print-container">
+
+        <!-- Summary Dashboard Cards (Hidden on Print) -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 no-print">
+            <!-- Total Customers -->
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-100 flex items-center justify-between">
+                <div>
+                    <p class="text-xs sm:text-sm font-medium text-slate-500">මුළු කස්ටමර්ලා ගණන (Total)</p>
+                    <h3 id="statTotal" class="text-2xl sm:text-3xl font-bold text-emerald-800 mt-1">0</h3>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-xl text-emerald-600">
+                    <i data-lucide="users" class="w-6 h-6"></i>
+                </div>
+            </div>
+
+            <!-- Today's Entries -->
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-100 flex items-center justify-between">
+                <div>
+                    <p class="text-xs sm:text-sm font-medium text-slate-500">අද ඇතුලත් කළ ගණන (Today)</p>
+                    <h3 id="statToday" class="text-2xl sm:text-3xl font-bold text-teal-700 mt-1">0</h3>
+                </div>
+                <div class="bg-teal-50 p-3 rounded-xl text-teal-600">
+                    <i data-lucide="calendar-check" class="w-6 h-6"></i>
+                </div>
+            </div>
+
+            <!-- Coordinator Summary -->
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-emerald-100 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-xs sm:text-sm font-medium text-slate-500">කෝඩිනේටර් සාරාංශය</p>
+                    <i data-lucide="award" class="w-4 h-4 text-emerald-600"></i>
+                </div>
+                <div id="coordinatorBreakdown" class="text-xs text-slate-700 space-y-1 max-h-16 overflow-y-auto pr-1">
+                    <span class="text-slate-400 italic">දත්ත පූරණය වෙමින්...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Two-Column Layout: Left = Entry Form, Right = Search & List -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- Left Column: New Customer Entry Form (Hidden on Print) -->
+            <section class="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden no-print">
+                <div class="bg-emerald-50/80 border-b border-emerald-100 px-5 py-4 flex items-center gap-2.5">
+                    <div class="bg-emerald-600 text-white p-1.5 rounded-lg">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i>
+                    </div>
+                    <h2 class="font-bold text-emerald-950 text-base">නව කස්ටමර් විස්තර ඇතුලත් කිරීම</h2>
+                </div>
+
+                <form id="customerForm" class="p-5 space-y-4">
+                    <!-- Duplicate / Error Alert Box inside Form -->
+                    <div id="duplicateAlert" class="hidden rounded-xl bg-red-50 border-2 border-red-300 p-4 text-red-900 space-y-2 transition-all">
+                        <div class="flex items-start gap-2.5">
+                            <i data-lucide="shield-alert" class="w-6 h-6 text-red-600 shrink-0 mt-0.5"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-red-800">මෙම දුරකතන අංකය දැනටමත් ඇතුලත් කර ඇත!</h4>
+                                <p id="duplicateAlertMsg" class="text-xs text-red-700 mt-1 leading-relaxed"></p>
+                            </div>
+                        </div>
+                        <div id="duplicateExistingCard" class="bg-white/90 rounded-lg p-2.5 border border-red-200 text-xs space-y-1 text-slate-700">
+                            <!-- Filled dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Success Toast inside Form -->
+                    <div id="successAlert" class="hidden rounded-xl bg-emerald-50 border border-emerald-300 p-3.5 text-emerald-900 flex items-center gap-2.5">
+                        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0"></i>
+                        <p id="successAlertMsg" class="text-xs font-semibold">කස්ටමර් විස්තර සාර්ථකව ඇතුලත් කරන ලදී!</p>
+                    </div>
+
+                    <!-- Phone Number (Primary Unique Key) -->
+                    <div>
+                        <label for="phoneInput" class="block text-xs font-bold text-slate-700 mb-1.5">
+                            දුරකතන අංකය (Phone Number) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                <i data-lucide="phone" class="w-4 h-4"></i>
+                            </span>
+                            <input type="tel" id="phoneInput" required placeholder="උදා: 077 123 4567"
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                        </div>
+                        <p id="livePhoneHint" class="text-[11px] mt-1 text-slate-500">එකම දුරකතන අංකය නැවත ඇතුලත් කළ නොහැක.</p>
+                    </div>
+
+                    <!-- Customer Name -->
+                    <div>
+                        <label for="nameInput" class="block text-xs font-bold text-slate-700 mb-1.5">
+                            කස්ටමර්ගේ නම (Customer Name) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                            </span>
+                            <input type="text" id="nameInput" required placeholder="සම්පූර්ණ නම ඇතුලත් කරන්න"
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div>
+                        <label for="addressInput" class="block text-xs font-bold text-slate-700 mb-1.5">
+                            ලිපිනය (Address) <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute top-3 left-3.5 text-slate-400">
+                                <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            </span>
+                            <textarea id="addressInput" rows="2" required placeholder="නගරය / ලිපිනය ඇතුලත් කරන්න"
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Coordinator Name or Number -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="coordinatorInput" class="block text-xs font-bold text-slate-700">
+                                කෝඩිනේටර් නම හෝ අංකය <span class="text-red-500">*</span>
+                            </label>
+                            <label class="inline-flex items-center gap-1 text-[11px] text-emerald-700 font-medium cursor-pointer select-none">
+                                <input type="checkbox" id="rememberCoordCheckbox" checked class="rounded text-emerald-600 focus:ring-emerald-500">
+                                <span>මතක තබාගන්න</span>
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                <i data-lucide="badge-check" class="w-4 h-4"></i>
+                            </span>
+                            <input type="text" id="coordinatorInput" required placeholder="උදා: කසුන් / C-01"
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Optional Note -->
+                    <div>
+                        <label for="noteInput" class="block text-xs font-bold text-slate-700 mb-1.5">
+                            විශේෂ සටහන් (Optional Note)
+                        </label>
+                        <input type="text" id="noteInput" placeholder="අවශ්‍ය නම් කෙටි සටහනක්..."
+                            class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submitBtn"
+                        class="w-full bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-emerald-700/20 transition flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>විස්තර ඇතුලත් කරන්න (Save)</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Column: Search, Filters & Customer List -->
+            <section class="lg:col-span-8 space-y-4 print-container">
+
+                <!-- Search & Filter Bar (Hidden on Print) -->
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-emerald-100 space-y-3 no-print">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <!-- Search Bar -->
+                        <div class="relative flex-1">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-emerald-600">
+                                <i data-lucide="search" class="w-5 h-5"></i>
+                            </span>
+                            <input type="text" id="searchInput" placeholder="දුරකතන අංකය, නම හෝ කෝඩිනේටර් සොයන්න (Search)..."
+                                class="w-full pl-11 pr-10 py-2.5 bg-emerald-50/40 border border-emerald-200 rounded-xl text-sm font-medium focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
+                            <button type="button" id="clearSearchBtn" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer">
+                                <i data-lucide="x-circle" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <!-- Coordinator Filter Dropdown -->
+                        <div class="sm:w-52">
+                            <select id="coordinatorFilter" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                                <option value="ALL">සියලුම කෝඩිනේටර්ලා</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Date Filter & Export Actions -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-100 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-500 font-medium">දිනය අනුව:</span>
+                            <select id="dateFilter" class="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium outline-none">
+                                <option value="ALL">සියලුම දින (All Time)</option>
+                                <option value="TODAY">අද දිනය පමණි (Today)</option>
+                                <option value="WEEK">පසුගිය දින 7 (Last 7 Days)</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <span id="filteredCountBadge" class="bg-emerald-100 text-emerald-800 font-semibold px-2.5 py-1 rounded-lg">
+                                පෙන්වන ගණන: 0
+                            </span>
+                            <button type="button" onclick="exportToCSV()" class="text-slate-600 hover:text-emerald-700 bg-slate-100 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg font-medium flex items-center gap-1 transition cursor-pointer">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                <span>CSV</span>
+                            </button>
+                            <button type="button" onclick="window.print()" class="text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1.5 rounded-lg font-semibold flex items-center gap-1 transition cursor-pointer">
+                                <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                                <span>සමරිය ප්‍රින්ට් කරන්න</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Records Table / Cards Container -->
+                <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden print-container">
+                    <!-- Table Header Bar (Hidden on Print) -->
+                    <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60 no-print">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i data-lucide="list-checks" class="w-4 h-4 text-emerald-600"></i>
+                            <span>ලියාපදිංචි කස්ටමර් විස්තර (Customer List)</span>
+                        </h3>
+                        <span class="text-[11px] text-slate-400">නවතම විස්තර ඉහළින්ම දිස්වේ</span>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="loadingState" class="p-10 text-center space-y-2 no-print">
+                        <div class="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto"></div>
+                        <p class="text-sm text-slate-500 font-medium">දත්ත පූරණය වෙමින් පවතී...</p>
+                    </div>
+
+                    <!-- Empty / Not Found State -->
+                    <div id="emptyState" class="hidden p-10 text-center space-y-3 no-print">
+                        <div class="bg-slate-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto text-slate-400">
+                            <i data-lucide="search-x" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-700 text-sm">කස්ටමර් විස්තර හමු නොවීය</h4>
+                            <p id="emptyStateSubtext" class="text-xs text-slate-500 mt-1">මෙම දුරකතන අංකය තවම ඇතුලත් කර නොමැත.</p>
+                        </div>
+                        <button type="button" id="quickAddFromSearchBtn" class="hidden inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-sm transition cursor-pointer">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            <span>මෙම අංකය ඇතුලත් කරන්න</span>
+                        </button>
+                    </div>
+
+                    <!-- Desktop & Print Table View -->
+                    <div id="tableWrapper" class="hidden overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-emerald-50/70 text-emerald-950 text-xs font-bold border-b border-emerald-100">
+                                    <th class="py-3 px-4 w-12">#</th>
+                                    <th class="py-3 px-4">දුරකතන අංකය</th>
+                                    <th class="py-3 px-4">කස්ටමර් නම</th>
+                                    <th class="py-3 px-4">ලිපිනය</th>
+                                    <th class="py-3 px-4">කෝඩිනේටර්</th>
+                                    <th class="py-3 px-4">දිනය / සටහන්</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerTableBody" class="divide-y divide-slate-100 text-sm">
+                                <!-- Rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer (Hidden on Print) -->
+    <footer class="bg-white border-t border-emerald-100 py-4 px-6 text-center text-xs text-slate-500 mt-10 no-print">
+        <p class="font-semibold text-emerald-800">CEYLON TREE PRODUCT</p>
+        <p class="mt-0.5">සියලුම කෝඩිනේටර්වරුන් සඳහා වන සජීවී කස්ටමර් කළමනාකරණ පද්ධතිය</p>
+    </footer>
+
+    <!-- Cloud / Database Settings Modal (Hidden on Print) -->
+    <div id="configModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-emerald-100 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div class="bg-emerald-800 text-white px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="database" class="w-5 h-5 text-emerald-200"></i>
+                    <h3 class="font-bold text-base">දත්ත ගබඩා සම්බන්ධතා සැකසුම් (Cloud Sync)</h3>
+                </div>
+                <button type="button" onclick="closeConfigModal()" class="text-emerald-200 hover:text-white p-1 rounded-lg cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-5 space-y-4 text-sm">
+                <div id="modalModeBanner" class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed">
+                    <!-- Dynamic mode status -->
+                </div>
+
+                <div>
+                    <label for="customConfigInput" class="block text-xs font-bold text-slate-700 mb-1.5">
+                        දුරකතන කිහිපයක් සජීවීව සම්බන්ධ කිරීමට (Multi-Phone Live Sync Config JSON):
+                    </label>
+                    <p class="text-[11px] text-slate-500 mb-2">
+                        ඔබ මෙම ඇප් එක වෙනම වෙබ් අඩවියකට (Host) දමා භාවිතා කරන්නේ නම්, පහත කොටුවට ඔබේ Cloud Database Config JSON කේතය ඇතුලත් කරන්න. එසේ නොමැති නම් දැනටමත් ඇති Local Backup ක්‍රමයෙන් දත්ත සුරැකේ.
+                    </p>
+                    <textarea id="customConfigInput" rows="5" placeholder='{"apiKey": "...", "authDomain": "...", "projectId": "...", "storageBucket": "...", "messagingSenderId": "...", "appId": "..."}'
+                        class="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl font-mono text-xs focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
+                </div>
+
+                <div id="configErrorMsg" class="hidden text-xs font-semibold text-red-600 bg-red-50 border border-red-200 p-2.5 rounded-lg"></div>
+
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                    <button type="button" onclick="resetToLocalMode()" class="text-xs font-semibold text-slate-600 hover:text-red-600 px-3 py-2 rounded-xl hover:bg-slate-100 transition cursor-pointer">
+                        Local Mode වෙත මාරු වන්න
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="closeConfigModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition cursor-pointer">
+                            වසන්න
+                        </button>
+                        <button type="button" onclick="saveCustomFirebaseConfig()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm transition cursor-pointer flex items-center gap-1.5">
+                            <i data-lucide="check" class="w-4 h-4"></i>
+                            <span>සුරකින්න සහ සම්බන්ධ කරන්න</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            runTransaction, 
+            onSnapshot, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Global State
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let isCloudMode = false; // true = Firestore Real-Time Sync, false = Local Device Storage Fallback
+        let allCustomers = []; // Real-time or local synced list
+        let customerMapByPhone = new Map(); // Fast O(1) duplicate lookup
+
+        const LOCAL_STORAGE_DATA_KEY = 'ctp_customers_local_db_v1';
+        const LOCAL_STORAGE_CONFIG_KEY = 'ctp_custom_firebase_config_v1';
+
+        // Built-in Ceylon Tree Product Firebase Configuration (Auto-connects all phones!)
+        const DEFAULT_EMBEDDED_CONFIG = {
+            apiKey: "AIzaSyB5prxZHzQQUJgOyCnoWOdhfFz-NrqPkRI",
+            authDomain: "ceylon-tree-product.firebaseapp.com",
+            projectId: "ceylon-tree-product",
+            storageBucket: "ceylon-tree-product.firebasestorage.app",
+            messagingSenderId: "509033474361",
+            appId: "1:509033474361:web:ef3b0a4233ba0e85c4a0e8",
+            measurementId: "G-PHE2YMVPFJ"
+        };
+
+        // Safely Resolve Environment Config (handles stringified JSON, global object, custom saved config, or embedded default)
+        function resolveFirebaseConfig() {
+            // 1. Check platform injected __firebase_config
+            try {
+                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                    const parsed = typeof __firebase_config === 'string' 
+                        ? JSON.parse(__firebase_config) 
+                        : __firebase_config;
+                    if (parsed && parsed.apiKey && parsed.projectId) {
+                        return { config: parsed, source: 'platform' };
+                    }
+                }
+            } catch (e) {
+                console.warn('Platform config parse warning:', e);
+            }
+
+            // 2. Check window.__firebase_config fallback
+            try {
+                if (typeof window !== 'undefined' && window.__firebase_config) {
+                    const parsed = typeof window.__firebase_config === 'string'
+                        ? JSON.parse(window.__firebase_config)
+                        : window.__firebase_config;
+                    if (parsed && parsed.apiKey && parsed.projectId) {
+                        return { config: parsed, source: 'platform' };
+                    }
+                }
+            } catch (e) {}
+
+            // 3. Check user-saved custom config in localStorage
+            try {
+                const savedCustom = localStorage.getItem(LOCAL_STORAGE_CONFIG_KEY);
+                if (savedCustom) {
+                    const parsed = JSON.parse(savedCustom);
+                    if (parsed && parsed.apiKey && parsed.projectId) {
+                        return { config: parsed, source: 'custom' };
+                    }
+                }
+            } catch (e) {}
+
+            // 4. Use built-in Ceylon Tree Product config automatically
+            if (DEFAULT_EMBEDDED_CONFIG && DEFAULT_EMBEDDED_CONFIG.apiKey) {
+                return { config: DEFAULT_EMBEDDED_CONFIG, source: 'embedded' };
+            }
+
+            return null;
+        }
+
+        const appId = (typeof __app_id !== 'undefined' && __app_id) ? __app_id : 'ceylon-tree-product-app';
+
+        // DOM Elements
+        const customerForm = document.getElementById('customerForm');
+        const phoneInput = document.getElementById('phoneInput');
+        const nameInput = document.getElementById('nameInput');
+        const addressInput = document.getElementById('addressInput');
+        const coordinatorInput = document.getElementById('coordinatorInput');
+        const noteInput = document.getElementById('noteInput');
+        const rememberCoordCheckbox = document.getElementById('rememberCoordCheckbox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const duplicateAlert = document.getElementById('duplicateAlert');
+        const duplicateAlertMsg = document.getElementById('duplicateAlertMsg');
+        const duplicateExistingCard = document.getElementById('duplicateExistingCard');
+        const successAlert = document.getElementById('successAlert');
+        const livePhoneHint = document.getElementById('livePhoneHint');
+
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const coordinatorFilter = document.getElementById('coordinatorFilter');
+        const dateFilter = document.getElementById('dateFilter');
+        const filteredCountBadge = document.getElementById('filteredCountBadge');
+
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        const emptyStateSubtext = document.getElementById('emptyStateSubtext');
+        const quickAddFromSearchBtn = document.getElementById('quickAddFromSearchBtn');
+        const tableWrapper = document.getElementById('tableWrapper');
+        const customerTableBody = document.getElementById('customerTableBody');
+
+        // Restore saved coordinator name from localStorage for convenience
+        try {
+            const savedCoord = localStorage.getItem('ctp_coordinator_name');
+            if (savedCoord) {
+                coordinatorInput.value = savedCoord;
+            }
+        } catch (e) {
+            console.warn('LocalStorage not accessible:', e);
+        }
+
+        // Helper: Normalize Phone Number (e.g., "077 123 4567" or "+94 77 123 4567" -> "0771234567")
+        function normalizePhone(rawPhone) {
+            if (!rawPhone) return '';
+            let cleaned = rawPhone.replace(/[\s\-().+]/g, '');
+            if (cleaned.startsWith('94') && cleaned.length === 11) {
+                cleaned = '0' + cleaned.slice(2);
+            }
+            return cleaned;
+        }
+
+        // Helper: Format Phone for Display (077 123 4567)
+        function formatPhoneDisplay(normPhone) {
+            if (normPhone.length === 10 && normPhone.startsWith('0')) {
+                return `${normPhone.slice(0, 3)} ${normPhone.slice(3, 6)} ${normPhone.slice(6)}`;
+            }
+            return normPhone;
+        }
+
+        // Helper: Format Timestamp
+        function formatDateTime(timestampObj) {
+            if (!timestampObj) return 'දැන්';
+            const date = timestampObj.toDate ? timestampObj.toDate() : new Date(timestampObj);
+            if (isNaN(date.getTime())) return '-';
+            return date.toLocaleDateString('si-LK', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            }) + ' ' + date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Helper: Check if date is Today
+        function isToday(timestampObj) {
+            if (!timestampObj) return true;
+            const date = timestampObj.toDate ? timestampObj.toDate() : new Date(timestampObj);
+            const now = new Date();
+            return date.getDate() === now.getDate() &&
+                   date.getMonth() === now.getMonth() &&
+                   date.getFullYear() === now.getFullYear();
+        }
+
+        // Helper: Check if date is within last 7 days
+        function isWithinLast7Days(timestampObj) {
+            if (!timestampObj) return true;
+            const date = timestampObj.toDate ? timestampObj.toDate() : new Date(timestampObj);
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            return date >= sevenDaysAgo;
+        }
+
+        // Update Sync Status UI
+        function setSyncStatus(statusType, text) {
+            const dot = document.getElementById('syncDot');
+            const label = document.getElementById('syncText');
+            label.textContent = text;
+            if (statusType === 'cloud') {
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+            } else if (statusType === 'local') {
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-red-400 animate-ping';
+            }
+        }
+
+        // Load Records from LocalStorage Fallback
+        function loadLocalRecords() {
+            try {
+                const raw = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
+                const parsed = raw ? JSON.parse(raw) : [];
+                updateAppDataState(parsed);
+            } catch (e) {
+                console.error('Local read error:', e);
+                updateAppDataState([]);
+            }
+        }
+
+        // Save Records to LocalStorage Fallback
+        function saveLocalRecords(records) {
+            try {
+                localStorage.setItem(LOCAL_STORAGE_DATA_KEY, JSON.stringify(records));
+            } catch (e) {
+                console.error('Local write error:', e);
+            }
+        }
+
+        // Centralized State Updater (Used by both Cloud Snapshot & Local Storage)
+        function updateAppDataState(records) {
+            const phoneMap = new Map();
+            records.forEach(record => {
+                if (record.normalizedPhone) {
+                    phoneMap.set(record.normalizedPhone, record);
+                }
+            });
+
+            // Sort newest first in JS memory
+            records.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.clientTimestamp || 0);
+                const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.clientTimestamp || 0);
+                return timeB - timeA;
+            });
+
+            allCustomers = records;
+            customerMapByPhone = phoneMap;
+
+            loadingState.classList.add('hidden');
+            updateDashboardStats();
+            updateCoordinatorFilterOptions();
+            renderCustomerTable();
+            checkLivePhoneInput();
+        }
+
+        // Activate Local Storage Mode gracefully (Never blocks the user with an error screen)
+        function activateLocalMode(reasonText) {
+            isCloudMode = false;
+            setSyncStatus('local', 'Local Backup (මෙම දුරකතනයේ පමණයි)');
+            loadLocalRecords();
+
+            // Listen for cross-tab changes on the same browser
+            window.addEventListener('storage', (e) => {
+                if (e.key === LOCAL_STORAGE_DATA_KEY && !isCloudMode) {
+                    loadLocalRecords();
+                }
+            });
+            console.info('Running in Local Backup mode:', reasonText);
+        }
+
+        // Initialize Firebase & Authentication with Graceful Fallback
+        async function initApp() {
+            const resolved = resolveFirebaseConfig();
+
+            if (!resolved) {
+                activateLocalMode('No external Firebase config injected; using LocalStorage.');
+                return;
+            }
+
+            try {
+                const app = initializeApp(resolved.config);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // RULE 3: Authenticate FIRST before any Firestore operations
+                if (resolved.source === 'platform' && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                currentUser = auth.currentUser;
+                if (!currentUser) {
+                    throw new Error('Authentication failed');
+                }
+
+                isCloudMode = true;
+                setSyncStatus('cloud', 'සජීවී සම්බන්ධතාවය (Live Sync)');
+                subscribeToCustomers();
+
+            } catch (error) {
+                console.warn('Cloud connection fallback to LocalStorage:', error);
+                activateLocalMode(error.message);
+            }
+        }
+
+        // Subscribe to Real-Time Customer Collection (RULE 1: Strict Public Shared Path)
+        function subscribeToCustomers() {
+            if (!currentUser || !db) return;
+
+            const customersColRef = collection(db, 'artifacts', appId, 'public', 'data', 'customers');
+
+            // RULE 2: Simple collection query without compound orderBy/where; sort in memory
+            onSnapshot(customersColRef, (snapshot) => {
+                const records = [];
+                snapshot.forEach((docSnap) => {
+                    records.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+                updateAppDataState(records);
+            }, (error) => {
+                console.error('Firestore Snapshot Error:', error);
+                activateLocalMode('Snapshot permission or network fallback');
+            });
+        }
+
+        // Modal Functions for Custom Config / Sync Status
+        window.openConfigModal = function() {
+            const modal = document.getElementById('configModal');
+            const banner = document.getElementById('modalModeBanner');
+            const input = document.getElementById('customConfigInput');
+            const errBox = document.getElementById('configErrorMsg');
+            errBox.classList.add('hidden');
+
+            try {
+                const saved = localStorage.getItem(LOCAL_STORAGE_CONFIG_KEY);
+                if (saved) input.value = saved;
+            } catch (e) {}
+
+            if (isCloudMode) {
+                banner.className = 'p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs leading-relaxed';
+                banner.innerHTML = '<strong>✅ සජීවී සම්බන්ධතාවය ක්‍රියාත්මකයි (Live Cloud Sync Active):</strong> සියලුම කෝඩිනේටර්වරුන්ගේ දුරකතන එකිනෙක සම්බන්ධ වී ඇත. නව දත්ත එසැණින් සැමට දිස්වේ.';
+            } else {
+                banner.className = 'p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed';
+                banner.innerHTML = '<strong>⚠️ දැනට ක්‍රියාත්මක වන්නේ Local Backup ක්‍රමයයි:</strong> දත්ත මෙම දුරකතනයේ/පරිගණකයේ ආරක්ෂිතව සුරැකේ. දුරකතන කිහිපයක් එකට සම්බන්ධ කිරීමට පහතින් Cloud Config JSON ඇතුලත් කරන්න.';
+            }
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeConfigModal = function() {
+            document.getElementById('configModal').classList.add('hidden');
+        };
+
+        window.saveCustomFirebaseConfig = function() {
+            const rawText = document.getElementById('customConfigInput').value.trim();
+            const errBox = document.getElementById('configErrorMsg');
+            errBox.classList.add('hidden');
+
+            if (!rawText) {
+                errBox.textContent = 'කරුණාකර වලංගු JSON වින්‍යාසයක් ඇතුලත් කරන්න.';
+                errBox.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                // Allow users to paste either pure JSON or JS object snippet
+                let jsonStr = rawText;
+                if (jsonStr.includes('=')) {
+                    jsonStr = jsonStr.substring(jsonStr.indexOf('=') + 1).replace(/;$/, '').trim();
+                }
+                const parsed = JSON.parse(jsonStr);
+                if (!parsed.apiKey || !parsed.projectId) {
+                    throw new Error('apiKey සහ projectId අනිවාර්ය වේ.');
+                }
+                localStorage.setItem(LOCAL_STORAGE_CONFIG_KEY, JSON.stringify(parsed));
+                window.location.reload();
+            } catch (e) {
+                errBox.textContent = 'වැරදි JSON ආකෘතියකි: ' + e.message;
+                errBox.classList.remove('hidden');
+            }
+        };
+
+        window.resetToLocalMode = function() {
+            try {
+                localStorage.removeItem(LOCAL_STORAGE_CONFIG_KEY);
+            } catch (e) {}
+            window.location.reload();
+        };
+
+        // Live Check as User Types Phone Number
+        function checkLivePhoneInput() {
+            const norm = normalizePhone(phoneInput.value);
+            if (!norm) {
+                livePhoneHint.textContent = 'එකම දුරකතන අංකය නැවත ඇතුලත් කළ නොහැක.';
+                livePhoneHint.className = 'text-[11px] mt-1 text-slate-500';
+                phoneInput.classList.remove('border-red-500', 'bg-red-50/40');
+                return;
+            }
+
+            if (customerMapByPhone.has(norm)) {
+                const existing = customerMapByPhone.get(norm);
+                livePhoneHint.textContent = `⚠️ මෙම අංකය දැනටමත් ඇතුලත් කර ඇත (කෝඩිනේටර්: ${existing.coordinator})`;
+                livePhoneHint.className = 'text-[11px] mt-1 text-red-600 font-bold';
+                phoneInput.classList.add('border-red-500', 'bg-red-50/40');
+            } else {
+                livePhoneHint.textContent = '✓ මෙම දුරකතන අංකය අලුත් අංකයකි (ඇතුලත් කළ හැක).';
+                livePhoneHint.className = 'text-[11px] mt-1 text-emerald-600 font-semibold';
+                phoneInput.classList.remove('border-red-500', 'bg-red-50/40');
+            }
+        }
+
+        phoneInput.addEventListener('input', () => {
+            duplicateAlert.classList.add('hidden');
+            checkLivePhoneInput();
+        });
+
+        // Show Detailed Duplicate Warning Card
+        function showDuplicateWarning(existingData) {
+            duplicateAlertMsg.innerHTML = `මෙම දුරකතන අංකය කලින් <strong>${escapeHTML(existingData.coordinator)}</strong> විසින් ඇතුලත් කර ඇති බැවින් නැවත ඇතුලත් කළ නොහැක.`;
+            duplicateExistingCard.innerHTML = `
+                <div class="flex justify-between">
+                    <span class="text-slate-500">කස්ටමර් නම:</span>
+                    <span class="font-bold text-slate-900">${escapeHTML(existingData.name)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">දුරකතන අංකය:</span>
+                    <span class="font-mono font-bold text-red-700">${escapeHTML(existingData.displayPhone || existingData.normalizedPhone)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">ලිපිනය:</span>
+                    <span class="font-medium text-slate-800 text-right max-w-[60%]">${escapeHTML(existingData.address)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">ඇතුලත් කළ කෝඩිනේටර්:</span>
+                    <span class="font-bold text-emerald-800">${escapeHTML(existingData.coordinator)}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">ඇතුලත් කළ දිනය:</span>
+                    <span>${formatDateTime(existingData.createdAt)}</span>
+                </div>
+            `;
+            duplicateAlert.classList.remove('hidden');
+            duplicateAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Form Submission with Atomic Firestore Transaction OR Local Fallback
+        customerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            duplicateAlert.classList.add('hidden');
+            successAlert.classList.add('hidden');
+
+            const rawPhone = phoneInput.value.trim();
+            const normPhone = normalizePhone(rawPhone);
+            const name = nameInput.value.trim();
+            const address = addressInput.value.trim();
+            const coordinator = coordinatorInput.value.trim();
+            const note = noteInput.value.trim();
+
+            // Basic validation
+            if (normPhone.length < 9) {
+                livePhoneHint.textContent = '⚠️ කරුණාකර නිවැරදි දුරකතන අංකයක් ඇතුලත් කරන්න (අවම අංක 9ක්).';
+                livePhoneHint.className = 'text-[11px] mt-1 text-red-600 font-bold';
+                phoneInput.focus();
+                return;
+            }
+
+            if (!name || !address || !coordinator) return;
+
+            // Save coordinator name in localStorage if checked
+            try {
+                if (rememberCoordCheckbox.checked) {
+                    localStorage.setItem('ctp_coordinator_name', coordinator);
+                } else {
+                    localStorage.removeItem('ctp_coordinator_name');
+                }
+            } catch (err) {}
+
+            // Fast client-side duplicate check first
+            if (customerMapByPhone.has(normPhone)) {
+                showDuplicateWarning(customerMapByPhone.get(normPhone));
+                return;
+            }
+
+            // Lock button during save
+            submitBtn.disabled = true;
+            const originalBtnHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = `<div class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div><span>පරීක්ෂා කරමින්...</span>`;
+
+            try {
+                if (isCloudMode && currentUser && db) {
+                    // Use normalized phone number as Document ID for strict uniqueness across all devices
+                    const customerDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'customers', normPhone);
+
+                    await runTransaction(db, async (transaction) => {
+                        const existingDoc = await transaction.get(customerDocRef);
+                        if (existingDoc.exists()) {
+                            const err = new Error('DUPLICATE_PHONE');
+                            err.existingData = existingDoc.data();
+                            throw err;
+                        }
+
+                        transaction.set(customerDocRef, {
+                            normalizedPhone: normPhone,
+                            displayPhone: formatPhoneDisplay(normPhone),
+                            name: name,
+                            address: address,
+                            coordinator: coordinator,
+                            note: note,
+                            createdAt: serverTimestamp(),
+                            clientTimestamp: Date.now(),
+                            createdByUid: currentUser.uid
+                        });
+                    });
+                } else {
+                    // Local Storage Mode Save with duplicate verification
+                    const rawLocal = localStorage.getItem(LOCAL_STORAGE_DATA_KEY);
+                    const currentLocalList = rawLocal ? JSON.parse(rawLocal) : [];
+                    const existingLocal = currentLocalList.find(item => item.normalizedPhone === normPhone);
+
+                    if (existingLocal) {
+                        const err = new Error('DUPLICATE_PHONE');
+                        err.existingData = existingLocal;
+                        throw err;
+                    }
+
+                    const newRecord = {
+                        id: normPhone,
+                        normalizedPhone: normPhone,
+                        displayPhone: formatPhoneDisplay(normPhone),
+                        name: name,
+                        address: address,
+                        coordinator: coordinator,
+                        note: note,
+                        createdAt: new Date().toISOString(),
+                        clientTimestamp: Date.now()
+                    };
+
+                    currentLocalList.unshift(newRecord);
+                    saveLocalRecords(currentLocalList);
+                    updateAppDataState(currentLocalList);
+                }
+
+                // Clear customer fields (keep coordinator name if remembered)
+                phoneInput.value = '';
+                nameInput.value = '';
+                addressInput.value = '';
+                noteInput.value = '';
+                checkLivePhoneInput();
+
+                successAlert.classList.remove('hidden');
+                setTimeout(() => {
+                    successAlert.classList.add('hidden');
+                }, 4000);
+
+            } catch (error) {
+                if (error.message === 'DUPLICATE_PHONE' && error.existingData) {
+                    showDuplicateWarning(error.existingData);
+                } else {
+                    console.error('Save Error:', error);
+                    duplicateAlertMsg.textContent = 'දත්ත ඇතුලත් කිරීමේදී දෝෂයක් ඇති විය. කරුණාකර නැවත උත්සාහ කරන්න.';
+                    duplicateExistingCard.innerHTML = '';
+                    duplicateAlert.classList.remove('hidden');
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHTML;
+            }
+        });
+
+        // Update Summary Stats & Coordinator Breakdown
+        function updateDashboardStats() {
+            const total = allCustomers.length;
+            let todayCount = 0;
+            const coordCounts = {};
+
+            allCustomers.forEach(c => {
+                if (isToday(c.createdAt)) todayCount++;
+                const coordName = c.coordinator || 'නොදන්නා';
+                coordCounts[coordName] = (coordCounts[coordName] || 0) + 1;
+            });
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statToday').textContent = todayCount;
+
+            const breakdownEl = document.getElementById('coordinatorBreakdown');
+            const sortedCoords = Object.entries(coordCounts).sort((a, b) => b[1] - a[1]);
+
+            if (sortedCoords.length === 0) {
+                breakdownEl.innerHTML = '<span class="text-slate-400">තවම දත්ත ඇතුලත් කර නොමැත.</span>';
+            } else {
+                breakdownEl.innerHTML = sortedCoords.map(([coord, count]) => `
+                    <div class="flex items-center justify-between py-0.5 border-b border-slate-100 last:border-0">
+                        <span class="font-medium text-slate-700 truncate pr-2">${escapeHTML(coord)}</span>
+                        <span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full text-[11px]">${count}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Populate Coordinator Filter Dropdown dynamically
+        function updateCoordinatorFilterOptions() {
+            const currentVal = coordinatorFilter.value;
+            const coords = new Set();
+            allCustomers.forEach(c => {
+                if (c.coordinator) coords.add(c.coordinator.trim());
+            });
+
+            const sorted = Array.from(coords).sort();
+            coordinatorFilter.innerHTML = '<option value="ALL">සියලුම කෝඩිනේටර්ලා</option>' +
+                sorted.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+
+            if (sorted.includes(currentVal)) {
+                coordinatorFilter.value = currentVal;
+            }
+        }
+
+        // Filter Logic
+        function getFilteredCustomers() {
+            const queryText = searchInput.value.trim().toLowerCase();
+            const normQueryPhone = normalizePhone(queryText);
+            const selectedCoord = coordinatorFilter.value;
+            const selectedDate = dateFilter.value;
+
+            return allCustomers.filter(c => {
+                // Coordinator Filter
+                if (selectedCoord !== 'ALL' && c.coordinator !== selectedCoord) {
+                    return false;
+                }
+
+                // Date Filter
+                if (selectedDate === 'TODAY' && !isToday(c.createdAt)) {
+                    return false;
+                }
+                if (selectedDate === 'WEEK' && !isWithinLast7Days(c.createdAt)) {
+                    return false;
+                }
+
+                // Search Query Filter (matches phone digits, name, address, or coordinator)
+                if (queryText) {
+                    const matchPhone = normQueryPhone && c.normalizedPhone.includes(normQueryPhone);
+                    const matchName = (c.name || '').toLowerCase().includes(queryText);
+                    const matchAddress = (c.address || '').toLowerCase().includes(queryText);
+                    const matchCoord = (c.coordinator || '').toLowerCase().includes(queryText);
+                    return matchPhone || matchName || matchAddress || matchCoord;
+                }
+
+                return true;
+            });
+        }
+
+        // Render Customer Table & Update Print Summary Info
+        function renderCustomerTable() {
+            const filtered = getFilteredCustomers();
+            filteredCountBadge.textContent = `පෙන්වන ගණන: ${filtered.length}`;
+
+            // Update Print Header Metadata
+            const nowStr = new Date().toLocaleString('si-LK', {
+                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            document.getElementById('printDateDisplay').textContent = `මුද්‍රණය කළ දිනය: ${nowStr}`;
+            
+            const coordText = coordinatorFilter.value === 'ALL' ? 'සියලුම කෝඩිනේටර්ලා' : coordinatorFilter.value;
+            const dateText = dateFilter.options[dateFilter.selectedIndex].text;
+            document.getElementById('printFilterDisplay').textContent = `පෙරහන: ${coordText} | ${dateText}`;
+            
+            document.getElementById('printStatsSummary').innerHTML = `
+                <span>වාර්තා ගණන (Records): <strong>${filtered.length}</strong></span>
+                <span>මුළු පද්ධති ගණන (Total System): <strong>${allCustomers.length}</strong></span>
+            `;
+
+            if (filtered.length === 0) {
+                tableWrapper.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+
+                const q = searchInput.value.trim();
+                const normQ = normalizePhone(q);
+                if (normQ.length >= 7 && /^\d+$/.test(normQ)) {
+                    emptyStateSubtext.textContent = `"${q}" දුරකතන අංකය තවම පද්ධතියේ නොමැත.`;
+                    quickAddFromSearchBtn.classList.remove('hidden');
+                    quickAddFromSearchBtn.onclick = () => {
+                        phoneInput.value = q;
+                        checkLivePhoneInput();
+                        nameInput.focus();
+                        phoneInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    };
+                } else {
+                    emptyStateSubtext.textContent = 'ඔබ සෙවූ විස්තර වලට ගැලපෙන කස්ටමර් කෙනෙකු හමු නොවීය.';
+                    quickAddFromSearchBtn.classList.add('hidden');
+                }
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            tableWrapper.classList.remove('hidden');
+
+            customerTableBody.innerHTML = filtered.map((c, index) => `
+                <tr class="hover:bg-emerald-50/40 transition">
+                    <td class="py-3 px-4 text-xs font-semibold text-slate-400">${index + 1}</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <a href="tel:${escapeHTML(c.normalizedPhone)}" class="font-mono font-bold text-emerald-800 hover:underline flex items-center gap-1.5">
+                            <span>${escapeHTML(c.displayPhone || formatPhoneDisplay(c.normalizedPhone))}</span>
+                        </a>
+                    </td>
+                    <td class="py-3 px-4 font-semibold text-slate-800">${escapeHTML(c.name)}</td>
+                    <td class="py-3 px-4 text-slate-600 text-xs sm:text-sm max-w-xs">${escapeHTML(c.address)}</td>
+                    <td class="py-3 px-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-50 text-teal-800 border border-teal-200">
+                            ${escapeHTML(c.coordinator)}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-xs text-slate-500 whitespace-nowrap">
+                        <div>${formatDateTime(c.createdAt)}</div>
+                        ${c.note ? `<div class="text-slate-700 font-medium mt-0.5 italic">"${escapeHTML(c.note)}"</div>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Search & Filter Event Listeners
+        searchInput.addEventListener('input', () => {
+            clearSearchBtn.classList.toggle('hidden', !searchInput.value);
+            renderCustomerTable();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            renderCustomerTable();
+            searchInput.focus();
+        });
+
+        coordinatorFilter.addEventListener('change', renderCustomerTable);
+        dateFilter.addEventListener('change', renderCustomerTable);
+
+        // Export Filtered Data to CSV
+        window.exportToCSV = function() {
+            const filtered = getFilteredCustomers();
+            if (filtered.length === 0) return;
+
+            const headers = ['No', 'Phone Number', 'Customer Name', 'Address', 'Coordinator', 'Date', 'Note'];
+            const rows = filtered.map((c, idx) => [
+                idx + 1,
+                `"${c.displayPhone || c.normalizedPhone}"`,
+                `"${(c.name || '').replace(/"/g, '""')}"`,
+                `"${(c.address || '').replace(/"/g, '""')}"`,
+                `"${(c.coordinator || '').replace(/"/g, '""')}"`,
+                `"${formatDateTime(c.createdAt)}"`,
+                `"${(c.note || '').replace(/"/g, '""')}"`
+            ]);
+
+            // Add UTF-8 BOM so Sinhala characters open properly in Excel
+            const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Ceylon_Tree_Product_Customers_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Security Helper: Escape HTML
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Start Application
+        initApp();
+    </script>
+</body>
+</html>
